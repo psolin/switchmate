@@ -86,10 +86,9 @@ def get_switchmates(scan_entries, mac_address):
 
 
 def scan(
-    start_msg, process_entry,
+    process_entry,
     timeout=None, mac_address=None, success_msg=None
 ):
-    print(start_msg)
     sys.stdout.flush()
 
     scanner = Scanner()
@@ -173,7 +172,8 @@ def switch(device, val):
 def print_entry_state(entry, state_handle=None):
     service_data = entry.getValueText(MANUFACTURER_DATA_AD_TYPE)
     val = int(service_data[1])
-    print(entry.addr, ("off", "on")[val])
+    entry.addr = ""
+    print(("False", "True")[val])
 
 
 def print_battery_level(device):
@@ -210,7 +210,6 @@ if __name__ == '__main__':
     mac_address = arguments['<mac_address>']
     if arguments['status']:
         scan(
-            'Looking for switchmate status...',
             timeout=timeout,
             process_entry=print_entry_state,
             mac_address=mac_address,
@@ -266,3 +265,4 @@ if __name__ == '__main__':
         except BTLEException as ex:
             print_exception(ex)
             sys.exit(1)
+
